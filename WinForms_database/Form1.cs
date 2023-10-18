@@ -1,15 +1,18 @@
-// Scaffold-DbContext "server=localhost;database=univDB;uid=root;pwd=201104" MySql.EntityFrameworkCore -OutputDir univDB -f
+// Scaffold-DbContext "server=localhost;database=todoDB;uid=root;pwd=201104" MySql.EntityFrameworkCore -OutputDir todoDB -f
+
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Forms;
+using WinForms_database.todoDB;
 using WinForms_database.univDB;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace WinForms_database
 {
+
     public partial class Form1 : Form
     {
-
+        public 일정 classData = null;
         public Form1()
         {
             InitializeComponent();
@@ -17,210 +20,124 @@ namespace WinForms_database
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            studentbox_repaint();
+            listbox_repaint();
         }
-        /**student_listbox를 다시 그려주기위한 메소드*/
-        public void studentbox_repaint(string filterName = "")
+        public void listbox_repaint()
         {
-            student_listBox.DisplayMember = "Name";
-            student_listBox.Items.Clear();
+            listbox_1.DisplayMember = "날짜";
+            listBox_2.DisplayMember = "날짜";
+            listbox_1.Items.Clear();
+            listBox_2.Items.Clear();
 
-            using (var db = new UnivDbContext())
+            using (var db = new TodoDbContext())
             {
-                var list = db.Students
-                    .Where(p => p.Name.Contains(filterName))
+                var check_list = db.일정s
+                    // .Where(p => p.완료여부 == true)
                     .ToList();
 
-                foreach (var student in list)
+                /* var false_list = db.일정s
+                     .Where(p => p.완료여부 == false)
+                     .ToList();*/
+
+                foreach (var 일정 in check_list)
                 {
-                    student_listBox.Items.Add(student);
+                    if (일정.완료여부 == true)
+                        listbox_1.Items.Add(일정);
+                    else
+                        listBox_2.Items.Add(일정);
                 }
+                /* foreach (var 일정 in false_list)
+                 {
+                     listBox_2.Items.Add(일정);
+                 }*/
+            }
+            /*
+                한번 쿼리해서 쪼개기
+             */
+
+        }
+        int selectedIndex = 0;
+        private void listbox_1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            var content = listbox_1.SelectedItem as 일정;
+            select_change(content);
+        }
+
+        private void listBox_2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            var content = listBox_2.SelectedItem as 일정;
+            select_change(content);
+
+        }
+        public void select_change(일정 content)
+        {
+            using (var db = new TodoDbContext())
+            {
+                var content_item = db.일정s.First(p => p.날짜 == content.날짜);
+                content_box.Text = content_item.할일내용;
+                dateTimePicker1.Value = content_item.날짜;
+                checkbox.Checked = content_item.완료여부;
             }
         }
-        public void subjectbox_repaint()
+
+        private void addbutton_Click(object sender, EventArgs e)
         {
-            subject_listBox.DisplayMember = "name";
-            subject_listBox.Items.Clear();
 
-            var item = student_listBox.SelectedItem as Student;
-            using (var db = new UnivDbContext())
+            try
             {
-                var list = db.Subjects
-                    .Include(p => p.Classes)
-                    .Where(p => p.Classes.Any(c => c.StudentId == item.Id))
-                    .ToList();
-
-                foreach (var subject in list)
+                using (var db = new TodoDbContext())
                 {
-                    subject_listBox.Items.Add(subject);
-                }
-            }
-        }
 
-        private void a_button_Click(object sender, EventArgs e)
-        {
-            var item = student_listBox.SelectedItem as Student;
-            if (item != null)
-            {
-                SJ_Form form = new SJ_Form(item);
-                if (DialogResult.OK == form.ShowDialog())
-                {
-                    try
+                    db.일정s.Add(new 일정()
                     {
-                        using (UnivDbContext context = new UnivDbContext())
-                        {
-                            context.Classes.Add(form.classData);
-                            context.SaveChanges();
-                            subjectbox_repaint();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("오류발생" + ex.Message);
-                    }
-                }
-            }
-        }
+                        날짜 = dateTimePicker1.Value,
+                        할일내용 = content_box.Text,
+                        완료여부 = checkbox.Checked,
 
-        private void student_listBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var item = student_listBox.SelectedItem as Student;
+                    });
 
+                    db.SaveChanges();
 
-            if (item != null)
-            {
-                subject_listBox.DisplayMember = "Name";
-                subject_listBox.Items.Clear();
-
-                using (var db = new UnivDbContext())
-                {
-                    /*클래스에서 학생의 subject 찾음*/
-                    var list = db.Classes
-                        .Include(p => p.Student)
-                        .Include(p => p.Subject)
-                        .Where(p => p.StudentId == item.Id)
-                        .ToList();
-                    foreach (var item2 in list)
-                        subject_listBox.Items.Add(item2.Subject);
-
-                    /*db.Students.Add(form.scoreData);
-                    db.SaveChanges();*/
 
                 }
-
+                listbox_repaint();
             }
-        }
-        private void u_button_Click(object sender, EventArgs e)
-        {
-            var student_selected = student_listBox.SelectedItem as Student;
-
-            var subject_selected = subject_listBox.SelectedItem as Subject;
-            if (subject_selected != null)
+            catch (Exception ex)
             {
-                SJ_Form form = new SJ_Form(student_selected);
-                if (DialogResult.OK == form.ShowDialog())
-                {
-                    try
-                    {
-                        using (UnivDbContext context = new UnivDbContext())
-                        {
-                            var item =
-                                  context.Classes.First(p => p.StudentId == student_selected.Id && p.SubjectId == subject_selected.Id);
-
-                            context.Classes.Remove(item);
-                            context.SaveChanges();
-
-                            //var newItem = new Class();
-                            item.StudentId = form.classData.StudentId;
-                            item.SubjectId = form.classData.SubjectId;
-                            item.Joined = form.classData.Joined;
-                            item.MidScore = form.classData.MidScore;
-                            item.FinalScore = form.classData.FinalScore;
-                            item.Grade = form.classData.Grade;
-
-                            context.Classes.Add(item);
-
-
-                            context.SaveChanges();
-                            subjectbox_repaint();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("오류발생" + ex.Message);
-                    }
-                }
+                MessageBox.Show("오류발생" + ex.Message);
             }
+
 
         }
-
-        private void d_button_Click(object sender, EventArgs e)
+        private void updatebutton_Click(object sender, EventArgs e)
         {
-            var studentselected = student_listBox.SelectedItem as Student;
-            var subjectselected = subject_listBox.SelectedItem as Subject;
-
-            if (studentselected != null)
+            using (var db = new TodoDbContext())
             {
-                if (DialogResult.Yes == MessageBox.Show("정말 지울랍니까?",
-                    "삭제", MessageBoxButtons.YesNo))
-                {
-                    using (UnivDbContext context = new UnivDbContext())
-                    {
-                        var item =
-                            context.Classes.First(p => p.StudentId == studentselected.Id && p.SubjectId == subjectselected.Id);
+                var item = db.일정s
+                    .First(p => p.날짜 == dateTimePicker1.Value);
 
-                        //First가 없응ㄹ 수도 있으니 FirstOrdefault() 메소드를 사용해야한다.
-                        // if(item !=null) 의 경우에도 정리를 해ㅜㅈ어야함
+                item.할일내용 = content_box.Text;
+                item.완료여부 = checkbox.Checked;
 
-
-                        context.Classes.Remove(item);
-
-                        context.SaveChanges();
-                    }
-
-                    subjectbox_repaint();
-                }
+                db.SaveChanges();
             }
-
+            listbox_repaint();
         }
 
-        private void subject_listBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void deletebutton_Click(object sender, EventArgs e)
         {
-            var student_item = student_listBox.SelectedItem as Student;
-            var Subject_item = subject_listBox.SelectedItem as Subject;
-
-            using (var context = new UnivDbContext())
+            using (var db = new TodoDbContext())
             {
-                var class_item = context.Classes.First(p => p.StudentId == student_item.Id && p.SubjectId == Subject_item.Id);
-                if (class_item != null)
-                {
-                    date_box.Value = class_item.Joined;
-                    min_inputBox.Text = class_item.MidScore.ToString();
-                    final_inputBox.Text = class_item.FinalScore.ToString();
-                    Grade_comboBox.Text = class_item.Grade;
-                }
+                var item = db.일정s
+                    .First(p => p.날짜 == dateTimePicker1.Value);
+
+                db.일정s.Remove(item);
+                db.SaveChanges();
             }
-        }
 
-        private void class_button_Click(object sender, EventArgs e)
-        {
-
-            var student_item = student_listBox.SelectedItem as Student;
-            var Subject_item = subject_listBox.SelectedItem as Subject;
-
-
-            using (var context = new UnivDbContext())
-            {
-                var class_item = context.Classes.First(p => p.StudentId == student_item.Id && p.SubjectId == Subject_item.Id);
-
-                class_item.Joined = date_box.Value;
-                class_item.MidScore = int.Parse(min_inputBox.Text);
-                class_item.FinalScore = int.Parse(final_inputBox.Text);
-                class_item.Grade = Grade_comboBox.Text;
-
-                context.SaveChanges();
-            }
-            
+            listbox_repaint();
         }
     }
 }
