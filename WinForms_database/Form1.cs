@@ -105,6 +105,7 @@ namespace WinForms_database
 
                     /*db.Students.Add(form.scoreData);
                     db.SaveChanges();*/
+
                 }
 
             }
@@ -138,7 +139,7 @@ namespace WinForms_database
                             item.Grade = form.classData.Grade;
 
                             context.Classes.Add(item);
-                            
+
 
                             context.SaveChanges();
                             subjectbox_repaint();
@@ -168,6 +169,10 @@ namespace WinForms_database
                         var item =
                             context.Classes.First(p => p.StudentId == studentselected.Id && p.SubjectId == subjectselected.Id);
 
+                        //First가 없응ㄹ 수도 있으니 FirstOrdefault() 메소드를 사용해야한다.
+                        // if(item !=null) 의 경우에도 정리를 해ㅜㅈ어야함
+
+
                         context.Classes.Remove(item);
 
                         context.SaveChanges();
@@ -177,6 +182,45 @@ namespace WinForms_database
                 }
             }
 
+        }
+
+        private void subject_listBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var student_item = student_listBox.SelectedItem as Student;
+            var Subject_item = subject_listBox.SelectedItem as Subject;
+
+            using (var context = new UnivDbContext())
+            {
+                var class_item = context.Classes.First(p => p.StudentId == student_item.Id && p.SubjectId == Subject_item.Id);
+                if (class_item != null)
+                {
+                    date_box.Value = class_item.Joined;
+                    min_inputBox.Text = class_item.MidScore.ToString();
+                    final_inputBox.Text = class_item.FinalScore.ToString();
+                    Grade_comboBox.Text = class_item.Grade;
+                }
+            }
+        }
+
+        private void class_button_Click(object sender, EventArgs e)
+        {
+
+            var student_item = student_listBox.SelectedItem as Student;
+            var Subject_item = subject_listBox.SelectedItem as Subject;
+
+
+            using (var context = new UnivDbContext())
+            {
+                var class_item = context.Classes.First(p => p.StudentId == student_item.Id && p.SubjectId == Subject_item.Id);
+
+                class_item.Joined = date_box.Value;
+                class_item.MidScore = int.Parse(min_inputBox.Text);
+                class_item.FinalScore = int.Parse(final_inputBox.Text);
+                class_item.Grade = Grade_comboBox.Text;
+
+                context.SaveChanges();
+            }
+            
         }
     }
 }

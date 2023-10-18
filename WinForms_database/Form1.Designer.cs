@@ -33,6 +33,15 @@
             u_button = new Button();
             d_button = new Button();
             subject_listBox = new ListBox();
+            date_box = new DateTimePicker();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            Grade_comboBox = new ComboBox();
+            final_inputBox = new TextBox();
+            min_inputBox = new TextBox();
+            class_button = new Button();
             SuspendLayout();
             // 
             // student_listBox
@@ -83,12 +92,98 @@
             subject_listBox.Name = "subject_listBox";
             subject_listBox.Size = new Size(169, 124);
             subject_listBox.TabIndex = 4;
+            subject_listBox.SelectedIndexChanged += subject_listBox_SelectedIndexChanged;
+            // 
+            // date_box
+            // 
+            date_box.Location = new Point(555, 36);
+            date_box.Name = "date_box";
+            date_box.Size = new Size(200, 23);
+            date_box.TabIndex = 5;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(461, 42);
+            label1.Name = "label1";
+            label1.Size = new Size(41, 15);
+            label1.TabIndex = 6;
+            label1.Text = "Joined";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(461, 104);
+            label2.Name = "label2";
+            label2.Size = new Size(58, 15);
+            label2.TabIndex = 7;
+            label2.Text = "MidScore";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(461, 156);
+            label3.Name = "label3";
+            label3.Size = new Size(62, 15);
+            label3.TabIndex = 8;
+            label3.Text = "FinalScore";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(461, 216);
+            label4.Name = "label4";
+            label4.Size = new Size(38, 15);
+            label4.TabIndex = 9;
+            label4.Text = "Grade";
+            // 
+            // Grade_comboBox
+            // 
+            Grade_comboBox.FormattingEnabled = true;
+            Grade_comboBox.Items.AddRange(new object[] { "a", "b", "c", "d", "e" });
+            Grade_comboBox.Location = new Point(555, 213);
+            Grade_comboBox.Name = "Grade_comboBox";
+            Grade_comboBox.Size = new Size(121, 23);
+            Grade_comboBox.TabIndex = 10;
+            // 
+            // final_inputBox
+            // 
+            final_inputBox.Location = new Point(555, 148);
+            final_inputBox.Name = "final_inputBox";
+            final_inputBox.Size = new Size(100, 23);
+            final_inputBox.TabIndex = 11;
+            // 
+            // min_inputBox
+            // 
+            min_inputBox.Location = new Point(555, 96);
+            min_inputBox.Name = "min_inputBox";
+            min_inputBox.Size = new Size(100, 23);
+            min_inputBox.TabIndex = 12;
+            // 
+            // class_button
+            // 
+            class_button.Location = new Point(643, 279);
+            class_button.Name = "class_button";
+            class_button.Size = new Size(112, 35);
+            class_button.TabIndex = 13;
+            class_button.Text = "확인";
+            class_button.UseVisualStyleBackColor = true;
+            class_button.Click += class_button_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(443, 390);
+            ClientSize = new Size(794, 390);
+            Controls.Add(class_button);
+            Controls.Add(min_inputBox);
+            Controls.Add(final_inputBox);
+            Controls.Add(Grade_comboBox);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(date_box);
             Controls.Add(subject_listBox);
             Controls.Add(d_button);
             Controls.Add(u_button);
@@ -98,6 +193,7 @@
             Text = "Form1";
             Load += Form1_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -107,5 +203,14 @@
         private Button u_button;
         private Button d_button;
         private ListBox subject_listBox;
+        private DateTimePicker date_box;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
+        private ComboBox Grade_comboBox;
+        private TextBox final_inputBox;
+        private TextBox min_inputBox;
+        private Button class_button;
     }
 }
