@@ -1,4 +1,4 @@
-// Scaffold-DbContext "server=localhost;database=univDB;uid=root;pwd=201104" MySql.EntityFrameworkCore -OutputDir univDB -f
+// Scaffold-DbContext "server=localhost;database=testDB;uid=root;pwd=201104" MySql.EntityFrameworkCore -OutputDir testDB -f
 namespace WinForms_database
 {
     public partial class Form1 : Form
