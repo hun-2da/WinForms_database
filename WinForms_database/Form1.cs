@@ -100,6 +100,7 @@ namespace WinForms_database
         }
         private void update_order_button_Click(object sender, EventArgs e)
         {
+            if (select == null) return;
             Order_Form form = new Order_Form(select, 2);
             if (DialogResult.OK == form.ShowDialog()) repaint();
         }
@@ -116,12 +117,14 @@ namespace WinForms_database
 
         private void add_menu_button_Click(object sender, EventArgs e)
         {
+            if(select == null) return;
             Menu_Form form = new Menu_Form(select, 1);
             if (form.ShowDialog() == DialogResult.OK) repaint();
         }
 
         private void update_menu_button_Click(object sender, EventArgs e)
         {
+            if(select2 == null) return;
             Menu_Form form = new Menu_Form(select, select2, 2);
             if (form.ShowDialog() == DialogResult.OK) repaint();
         }
