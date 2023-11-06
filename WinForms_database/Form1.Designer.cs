@@ -32,15 +32,13 @@
             label1 = new Label();
             label2 = new Label();
             listBox2 = new ListBox();
-            button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
+            label3 = new Label();
+            listBox3 = new ListBox();
+            label4 = new Label();
+            listBox4 = new ListBox();
+            label5 = new Label();
             label6 = new Label();
-            textBox2 = new TextBox();
-            checkBox1 = new CheckBox();
-            dateTimePicker1 = new DateTimePicker();
-            수행자 = new Label();
-            textBox1 = new TextBox();
+            delete_button = new Button();
             SuspendLayout();
             // 
             // listBox1
@@ -58,119 +56,105 @@
             label1.AutoSize = true;
             label1.Location = new Point(64, 27);
             label1.Name = "label1";
-            label1.Size = new Size(39, 15);
+            label1.Size = new Size(55, 15);
             label1.TabIndex = 1;
-            label1.Text = "label1";
+            label1.Text = "의사목록";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(260, 27);
+            label2.Location = new Point(283, 27);
             label2.Name = "label2";
-            label2.Size = new Size(39, 15);
+            label2.Size = new Size(55, 15);
             label2.TabIndex = 3;
-            label2.Text = "label2";
+            label2.Text = "환자목록";
             // 
             // listBox2
             // 
             listBox2.FormattingEnabled = true;
             listBox2.ItemHeight = 15;
-            listBox2.Location = new Point(260, 55);
+            listBox2.Location = new Point(283, 55);
             listBox2.Name = "listBox2";
             listBox2.Size = new Size(152, 349);
             listBox2.TabIndex = 2;
             // 
-            // button1
+            // label3
             // 
-            button1.Location = new Point(501, 175);
-            button1.Name = "button1";
-            button1.Size = new Size(128, 62);
-            button1.TabIndex = 4;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            label3.AutoSize = true;
+            label3.Location = new Point(502, 27);
+            label3.Name = "label3";
+            label3.Size = new Size(39, 15);
+            label3.TabIndex = 5;
+            label3.Text = "label3";
             // 
-            // button2
+            // listBox3
             // 
-            button2.Location = new Point(501, 260);
-            button2.Name = "button2";
-            button2.Size = new Size(128, 62);
-            button2.TabIndex = 5;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
+            listBox3.FormattingEnabled = true;
+            listBox3.ItemHeight = 15;
+            listBox3.Location = new Point(502, 55);
+            listBox3.Name = "listBox3";
+            listBox3.Size = new Size(152, 349);
+            listBox3.TabIndex = 4;
+            listBox3.SelectedIndexChanged += listBox3_SelectedIndexChanged;
             // 
-            // button3
+            // label4
             // 
-            button3.Location = new Point(501, 343);
-            button3.Name = "button3";
-            button3.Size = new Size(128, 62);
-            button3.TabIndex = 6;
-            button3.Text = "button3";
-            button3.UseVisualStyleBackColor = true;
+            label4.AutoSize = true;
+            label4.Location = new Point(721, 27);
+            label4.Name = "label4";
+            label4.Size = new Size(39, 15);
+            label4.TabIndex = 7;
+            label4.Text = "label4";
+            // 
+            // listBox4
+            // 
+            listBox4.FormattingEnabled = true;
+            listBox4.ItemHeight = 15;
+            listBox4.Location = new Point(721, 55);
+            listBox4.Name = "listBox4";
+            listBox4.Size = new Size(152, 349);
+            listBox4.TabIndex = 6;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(721, 27);
+            label5.Name = "label5";
+            label5.Size = new Size(55, 15);
+            label5.TabIndex = 8;
+            label5.Text = "의사목록";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(454, 139);
+            label6.Location = new Point(502, 27);
             label6.Name = "label6";
-            label6.Size = new Size(31, 15);
-            label6.TabIndex = 14;
-            label6.Text = "내용";
+            label6.Size = new Size(55, 15);
+            label6.TabIndex = 9;
+            label6.Text = "환자목록";
             // 
-            // textBox2
+            // delete_button
             // 
-            textBox2.Location = new Point(511, 131);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 13;
-            // 
-            // checkBox1
-            // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(454, 419);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(84, 19);
-            checkBox1.TabIndex = 15;
-            checkBox1.Text = "checkBox1";
-            checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // dateTimePicker1
-            // 
-            dateTimePicker1.Location = new Point(445, 58);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
-            dateTimePicker1.TabIndex = 16;
-            // 
-            // 수행자
-            // 
-            수행자.AutoSize = true;
-            수행자.Location = new Point(454, 105);
-            수행자.Name = "수행자";
-            수행자.Size = new Size(43, 15);
-            수행자.TabIndex = 18;
-            수행자.Text = "수행자";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(511, 102);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 17;
+            delete_button.Location = new Point(64, 423);
+            delete_button.Name = "delete_button";
+            delete_button.Size = new Size(203, 83);
+            delete_button.TabIndex = 10;
+            delete_button.Text = "삭제";
+            delete_button.UseVisualStyleBackColor = true;
+            delete_button.Click += delete_button_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(696, 450);
-            Controls.Add(수행자);
-            Controls.Add(textBox1);
-            Controls.Add(dateTimePicker1);
-            Controls.Add(checkBox1);
+            ClientSize = new Size(959, 630);
+            Controls.Add(delete_button);
             Controls.Add(label6);
-            Controls.Add(textBox2);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(listBox4);
+            Controls.Add(label3);
+            Controls.Add(listBox3);
             Controls.Add(label2);
             Controls.Add(listBox2);
             Controls.Add(label1);
@@ -188,14 +172,12 @@
         private Label label1;
         private Label label2;
         private ListBox listBox2;
-        private Button button1;
-        private Button button2;
-        private Button button3;
+        private Label label3;
+        private ListBox listBox3;
+        private Label label4;
+        private ListBox listBox4;
+        private Label label5;
         private Label label6;
-        private TextBox textBox2;
-        private CheckBox checkBox1;
-        private DateTimePicker dateTimePicker1;
-        private Label 수행자;
-        private TextBox textBox1;
+        private Button delete_button;
     }
 }
