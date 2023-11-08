@@ -11,6 +11,8 @@ public partial class Porderdetail
 
     public int ProductId { get; set; }
 
+    public int Qty { get; set; }
+
     public virtual Porder Porder { get; set; } = null!;
 
     public virtual Product Product { get; set; } = null!;

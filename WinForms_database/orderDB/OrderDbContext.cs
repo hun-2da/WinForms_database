@@ -82,6 +82,7 @@ public partial class OrderDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.PorderId).HasColumnName("porder_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.Qty).HasColumnName("qty");
 
             entity.HasOne(d => d.Porder).WithMany(p => p.Porderdetails)
                 .HasForeignKey(d => d.PorderId)
