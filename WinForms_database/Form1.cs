@@ -3,12 +3,19 @@ namespace WinForms_database
 {
     public partial class Form1 : Form
     {
+        List<Contact> contacts;
+
         public Form1()
         {
             InitializeComponent();
             listBox1.Format += ListBox1_Format;
             listBox2.Format += ListBox2_Format;
         }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            DataRefresh();
+        }
+
 
         private void ListBox2_Format(object? sender, ListControlConvertEventArgs e)
         {
@@ -42,19 +49,6 @@ namespace WinForms_database
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            listBox1.Items.Clear();
-            listBox2.Items.Clear();
-
-            List<Contact> contacts = Contact.SampleData();
-
-            foreach (var contact in contacts)
-            {
-                listBox1.Items.Add(contact);
-            }
-        }
-
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selected = listBox1.SelectedItem as Contact;
@@ -74,5 +68,79 @@ namespace WinForms_database
                 }
             }
         }
+
+        void DataRefresh(String filterString = "")
+        {
+            contacts = Contact.SampleData().Where(p => p.FirstName.Contains(filterString) ||
+                p.LastName.Contains(filterString) ||
+                p.Phone.Contains(filterString) ||
+                p.State.Contains(filterString.ToUpper())).ToList();
+
+            //Contains은 해당 문자열이 존재하는지 확인하는 메소드이다.
+            // 즉 name또는 phone, state에 해당문자가 포함되어 있는지 확인
+            // 메소드의 재사용성을 높이기 위해서 해당 경우가 true일때 해당 열을 가져오는 코드. 현재는 비었음.
+
+            listBox1.Items.Clear();
+            listBox2.Items.Clear();
+
+            foreach (var contact in contacts)
+            {
+                listBox1.Items.Add(contact);
+            }// 해당 여건에 맞는 모든 list를 가져옴. 지금은 모든 항목을 가져온다.
+        }
+        /**추가를 위한 버튼*/
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            AddModifyForms form = new AddModifyForms();
+            if (form.ShowDialog() == DialogResult.OK)       // 띄운 dialog가 true인 경우에만.
+            {
+                listBox1.Items.Add(
+                form.ContactData);
+            }
+        }
+        /**업데이트를 위한 버튼*/
+        private void ModifyButton_Click(object sender, EventArgs e)
+        {
+            var selected = listBox1.SelectedItem as Contact;
+            // 연락처중 한명 선택
+
+            if (selected != null)
+            {
+                AddModifyForms form = new AddModifyForms();
+
+                form.ContactData = selected;
+
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    listBox1.Items.Remove(selected);
+                    listBox1.Items.Add(form.ContactData);
+                }
+                //삭제후 새로운 값으로 add
+                //이렇게 하는 이유는? listbox의 항목 업데이트 하기 위해서
+            }
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            var selected = listBox1.SelectedItem as Contact;
+
+            if (selected != null)
+            {
+                if (MessageBox
+                    .Show("확인", "정말로 삭제하시겠습니까?", MessageBoxButtons.YesNo)
+                    == DialogResult.Yes)
+                {
+                    listBox1.Items.Remove(selected);// 선택항목을 제거.
+
+                }
+            }
+        }
+
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            DataRefresh(SearchTextBox.Text);
+            //DataRefresh에 filter를 추가한 이유. 해당 경우처럼 검색을 위해서이다.
+        }
+
     }
 }
