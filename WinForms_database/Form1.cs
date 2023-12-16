@@ -10,12 +10,30 @@ namespace WinForms_database
             InitializeComponent();
             listBox1.Format += ListBox1_Format;
             listBox2.Format += ListBox2_Format;
+            listBox3.Format += ListBox3_Format;
         }
+
+       
+
         private void Form1_Load(object sender, EventArgs e)
         {
             DataRefresh();
         }
 
+        private void ListBox3_Format(object? sender, ListControlConvertEventArgs e)
+        {
+            var callLog = e.ListItem as CallLogForView;
+            if (callLog != null)
+            {
+                e.Value = string.Format("{4} {3} {0} {1} ({2}min)",
+                    callLog.When.ToString("MM/dd HH:mm"),
+                    callLog.IsIncoming ? "<-" : "->",
+                    callLog.Duration, 
+                    callLog.PhoneNumber,
+                    callLog.FirstName);
+            }
+
+        }
 
         private void ListBox2_Format(object? sender, ListControlConvertEventArgs e)
         {
@@ -142,5 +160,50 @@ namespace WinForms_database
             //DataRefresh에 filter를 추가한 이유. 해당 경우처럼 검색을 위해서이다.
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var callLogs = CallLog.SampleData();
+            // 저장된 데이터를 불러옴. db를 불러오는 것과 같은 격.
+
+            var q = from 
+                    p in callLogs   //collogs의 정보를 가져옴.
+                    join                                        // 특정 조건에 따라 결합.
+                    p2 in contacts  //contacts의 정보를 가져옴.
+                    on p.Number equals p2.Phone                 // collog의 number와 contacts의 phone이 같을 경우 join
+                    //즉 연락처인물과 기록들을 통으로 만듦
+
+                    select new CallLogForView
+                    {
+                        When = p.When,
+                        Duration = p.Duration,
+                        IsIncoming = p.Incoming,
+                        PhoneNumber = p.Number,
+                        FirstName = p2.FirstName
+                    };
+                    // 통으로 만들어진 결과를 CalLogForView의 객체로 만들어서 사용하고 싶은 정보를 선별하여 편리하게 사용 가능.
+
+            foreach (var item in q)
+            {
+                listBox3.Items.Add(new CallLogForView()
+                {
+                    FirstName = item.FirstName,
+                    PhoneNumber = item.PhoneNumber,
+                    Duration = item.Duration,
+                    When = item.When,
+                    IsIncoming = item.IsIncoming
+                }); //3번째 listbox에 필요한 정보들을 전부 가져오는 코드
+            }
+
+        }
+
+    }
+    public class CallLogForView
+    {
+        public string FirstName { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public DateTime When { get; set; }
+        public bool IsIncoming { get; set; }
+        public int Duration { get; set; }
     }
 }

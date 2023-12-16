@@ -37,6 +37,8 @@
             DeleteButton = new Button();
             ModifyButton = new Button();
             AddButton = new Button();
+            listBox3 = new ListBox();
+            button1 = new Button();
             SuspendLayout();
             // 
             // label2
@@ -125,11 +127,32 @@
             AddButton.UseVisualStyleBackColor = true;
             AddButton.Click += AddButton_Click;
             // 
+            // listBox3
+            // 
+            listBox3.FormattingEnabled = true;
+            listBox3.ItemHeight = 15;
+            listBox3.Location = new Point(634, 133);
+            listBox3.Name = "listBox3";
+            listBox3.Size = new Size(296, 244);
+            listBox3.TabIndex = 15;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(675, 91);
+            button1.Name = "button1";
+            button1.Size = new Size(178, 23);
+            button1.TabIndex = 14;
+            button1.Text = "View All Calllog";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1024, 581);
+            Controls.Add(listBox3);
+            Controls.Add(button1);
             Controls.Add(SearchButton);
             Controls.Add(SearchTextBox);
             Controls.Add(DeleteButton);
@@ -157,5 +180,7 @@
         private Button DeleteButton;
         private Button ModifyButton;
         private Button AddButton;
+        private ListBox listBox3;
+        private Button button1;
     }
 }
