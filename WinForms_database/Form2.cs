@@ -16,6 +16,17 @@ namespace WinForms_database
         public Form2()
         {
             InitializeComponent();
+            listBox3.Format += ListBox3_Format;
+        }
+        private void ListBox3_Format(object? sender, ListControlConvertEventArgs e)
+        {
+            var item = e.ListItem as POrderDetailForView;
+
+            if (item != null)
+            {
+                e.Value = string.Format("{0} {1}개",
+                    item.ProductName, item.Qty);
+            }
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -47,13 +58,12 @@ namespace WinForms_database
             var qty = int.Parse(textBox1.Text);
 
             bool updateFlag = false;
-            foreach (var item in listBox3.Items)//listbox3의 아이템 확인
+            foreach (var item in listBox3.Items)
             {
-                if ((item as PorderDetail).ProductId == selectedProduct.Id)
-                // PorderDetail에 해당 product의 id와 같은 id 의 상품이 존재할때
+                if ((item as POrderDetailForView).ProductId == selectedProduct.Id)
                 {
-                    (item as PorderDetail).Qty += qty;  // 수 추가
-                    updateFlag = true;                  // update를 했으므로 insert를 못하게끔
+                    (item as POrderDetailForView).Qty += qty;
+                    updateFlag = true;
                     break;
                 }
             }
@@ -81,19 +91,36 @@ namespace WinForms_database
             using (OrderDbContext db = new OrderDbContext())
             {
                 List<PorderDetail> list = new List<PorderDetail>();
-                foreach (var item in listBox3.Items)
-                    list.Add(item as PorderDetail);                 // 모든 listbox3의 item들을 porderDetail객체로 list에 삽입
 
-                db.Porders.Add(new Porder()                         //  주문자를 추가
+                foreach (var item in listBox3.Items)
                 {
-                    Created = DateTime.Now,
-                    MemberId = selectedMember.Id,
-                    PorderDetails = list
-                });
+                    list.Add(new PorderDetail()
+                    {
+                        ProductId = (item as POrderDetailForView).ProductId,
+                        Qty = (item as POrderDetailForView).Qty
+                    });
+
+                }
+
                 // 주문자는 선택된 해당 id의 사람이며 모든 해당상품의 porderDetails list를 추가.
 
                 db.SaveChanges();
             }
         }
+        private void RemoveButton_Click(object sender, EventArgs e)
+        {
+            var selected = listBox3.SelectedItem as POrderDetailForView;
+            // 이번에는 View모델을 위한 클래스를 외부에 만들었음
+            // 해당 item을 POrderDetailForView 객체로, add부분에서도 변경되었음.
+
+            if (selected != null)
+                listBox3.Items.Remove(selected);
+        }
+
+        private void AllRemoveButton_Click(object sender, EventArgs e)
+        {
+            listBox3.Items.Clear(); 
+        }
+        //db에는 저장안되어있음으로 list에서만 삭제
     }
 }

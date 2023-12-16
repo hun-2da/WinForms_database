@@ -50,6 +50,7 @@
             button4.TabIndex = 23;
             button4.Text = "모든 제품 빼기";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += AllRemoveButton_Click;
             // 
             // button3
             // 
@@ -59,6 +60,7 @@
             button3.TabIndex = 22;
             button3.Text = "선택한 제품 빼기";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += RemoveButton_Click;
             // 
             // button2
             // 
