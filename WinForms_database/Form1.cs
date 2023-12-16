@@ -65,6 +65,7 @@ namespace WinForms_database
                         SubjectId = item.SubjectId,
                     });
                 }//통으만든 q를 전부 ClassForView로 객체화해서 사용
+                //편의성과 정보선별을 위해 해당 클래스로 사용을 한다.
             }
         }
     }
