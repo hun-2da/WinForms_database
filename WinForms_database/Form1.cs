@@ -47,7 +47,34 @@ namespace WinForms_database
 
             using (var db = new orderDB.OrderDbContext())
             {
-                foreach (var order in
+
+                var q = from p3 in db.Porders
+                                    .Include(p => p.Member)
+                                    .Include(p => p.PorderDetails)
+                        select new POrderForView()
+                        {
+                            MemberName = p3.Member.Name,
+                            Created = p3.Created,
+                            POrderId = p3.Id,
+                            Details = (from p1 in p3.PorderDetails
+                                       join p2 in db.Products
+                                       on p1.ProductId equals p2.Id
+
+                                       // Details에는 PorderDetails 와 Products 테이블의 정보가 필요함을 알 수 있음.
+
+                                       select new POrderDetailForView()
+                                       {
+                                           ProductId = p1.ProductId,
+                                           ProductName = p2.Name,
+                                           Price = p2.Price,
+                                           Qty = p1.Qty
+                                       }).ToList()
+                        };
+
+                foreach (var item in q)
+                    listBox1.Items.Add(item);
+
+                /*foreach (var order in
                     db.Porders
                     .Include(p => p.Member)
                     .Include(p => p.PorderDetails)
@@ -74,7 +101,7 @@ namespace WinForms_database
                                        Qty = p1.Qty
                                    }).ToList()
                     });
-                }
+                }*/
 
             }
         }
@@ -88,13 +115,18 @@ namespace WinForms_database
         {
             var selected = listBox1.SelectedItem as POrderForView;
 
+            int sum = 0;
             if (selected != null)
             {
                 listBox2.Items.Clear();
 
                 foreach (var item in selected.Details)
+                {
                     listBox2.Items.Add(item);
+                    sum += (item.Price * item.Qty); //가격 * 개수를 sum에 합
+                }
             }
+            label4.Text = string.Format("{0} 원", sum);  //label text를 변경시켜주는 코드
         }
     }
 }

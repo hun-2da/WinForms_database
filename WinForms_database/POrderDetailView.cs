@@ -18,6 +18,7 @@ namespace WinForms_database
     {
         public int ProductId { get; set; }
         public string ProductName { get; set; }
+        public int Price { get; set; }
         public int Qty { get; set; }
     }
 }
