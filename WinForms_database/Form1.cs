@@ -29,7 +29,7 @@ namespace WinForms_database
 
                     button.Click += (s, e) =>  //버튼 콜백메소드 s는 object
                     {
-                        //if (button.Text.Contains("�����"))
+                        // 자리가 사용 가능한지 여부확인 button.Tag ? false : true;
                         if ((bool)button.Tag)
                         {
                             button.Text = button.Name;
@@ -37,7 +37,7 @@ namespace WinForms_database
                         }
                         else
                         {
-                            button.Text = button.Name + "\n�����";
+                            button.Text = button.Name + "\n예매";
                             ToggleSeat(int.Parse(button.Name), true);
                         }
                     };
@@ -78,7 +78,7 @@ namespace WinForms_database
                     {
                         var button = buttons.First(p => p.Name == seat.Id.ToString());
                         button.Tag = seat.Used;
-                        button.Text += "\n�����";
+                        button.Text += "\n예매가능";
                     }
 
 
